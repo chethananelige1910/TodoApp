@@ -9,9 +9,7 @@
     <script>
         var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         function changeTodoStaus(id) {
-            console.log(id)
             let completionStatus = document.getElementById(`todo-checkbox-${id}`).checked;
-            console.log("fiujcv");
             fetch(`/todos/${id}`, {
                 method: "PUT",
                 headers: {
@@ -28,7 +26,6 @@
                 }
             })
             .catch((err) => {
-                console.log(err);
             })
         }
         function deleteTodo(id){
@@ -47,7 +44,6 @@
                 }
             })
             .catch((err) => {
-                console.log(err);
             })
         }
       </script>
@@ -77,7 +73,7 @@
             <%- include('todos.ejs', {section: "Due Today", todos: dueToday, id: "due-today"}) %>
             <%- include('todos.ejs', {section: "Due Later", todos: dueLater, id: "due-later"}) %>
             <%- include('todos.ejs', {section: "Completed", todos: completedItems, id: "completed-items"}) %>
-            <h1>Made By Sai tharun with Node.js</h1>
+            <h1>Made with Node.js</h1>
         </div> 
     </div>
 </body>
