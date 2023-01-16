@@ -86,10 +86,15 @@ passport.deserializeUser((id, done) => {
 });
 
 app.get("/", async function (request, response) {
-  response.render("index", {
-    title: "Todo Application",
-    csrfToken: request.csrfToken(),
-  });
+  if (request.user) {
+    request.flash("info", "You are already logged in");
+    response.redirect("/todos");
+  } else {
+    response.render("index", {
+      title: "Todo Application",
+      csrfToken: request.csrfToken(),
+    });
+  }
 });
 
 app.get(
@@ -97,6 +102,7 @@ app.get(
   connectEnsureLogin.ensureLoggedIn(),
   async function (request, response) {
     const loggedinUser = request.user.id;
+    const username = request.user.firstName + " " + request.user.lastName;
     const overDue = await Todo.overDue(loggedinUser);
     const dueToday = await Todo.dueToday(loggedinUser);
     const dueLater = await Todo.dueLater(loggedinUser);
@@ -107,6 +113,7 @@ app.get(
         dueToday,
         dueLater,
         completedItems,
+        username: username,
         csrfToken: request.csrfToken(),
       });
     } else {
@@ -114,6 +121,7 @@ app.get(
         overDue,
         dueToday,
         dueLater,
+        username: username,
         completedItems,
       });
     }
